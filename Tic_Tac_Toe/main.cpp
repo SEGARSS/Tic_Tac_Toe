@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 /*
 1. Сделать чтобы кружок оставался после нажатия в клетке.
@@ -29,11 +30,13 @@ int main()
     rectangle4.setOutlineColor(sf::Color::Red);
     rectangle4.setPosition({ 0, 400 });
 
-    sf::CircleShape circle;
-    circle.setRadius(70);
-    circle.setOrigin({ 70, 70 });
-    circle.setOutlineColor(sf::Color::Red);
-    circle.setOutlineThickness(5);
+    std::vector<sf::CircleShape> circle;
+
+    sf::CircleShape newCircle;
+    newCircle.setRadius(70);
+    newCircle.setOrigin({ 70, 70 });
+    newCircle.setOutlineColor(sf::Color::Red);
+    newCircle.setOutlineThickness(5);
 
     std::vector<sf::FloatRect> fields;
     fields.push_back(sf::FloatRect({ 0, 0 }, { 200, 200 }));
@@ -66,7 +69,8 @@ int main()
                     {
                         if (fields[i].contains(pos) == true)
                         {
-                            circle.setPosition(fields[i].getCenter()); 
+                            newCircle.setPosition(fields[i].getCenter());
+                            circle.push_back(newCircle);
                         }
                     }
                 }
@@ -81,7 +85,10 @@ int main()
         window.draw(rectangle3);
         window.draw(rectangle4);
 
-        window.draw(circle);
+        for (int i = 0; i < circle.size(); i++)
+        {
+            window.draw(circle[i]);
+        }
 
         // Update the window
         window.display();
