@@ -1,5 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <vector>
+#include <iostream>
 
 /*
 1. Сделать чтобы кружок оставался после нажатия в клетке.
@@ -69,8 +70,18 @@ int main()
                     {
                         if (fields[i].contains(pos) == true)
                         {
+                            sf::Vector2f corV = fields[i].getCenter();
                             newCircle.setPosition(fields[i].getCenter());
                             circle.push_back(newCircle);
+                            for (int i = 0; i < circle.size(); i++)
+                            {
+                                if (corV.x == circle[i].getPosition().x && corV.y == circle[i].getPosition().y)
+                                {
+
+                                }
+                                std::cout << circle[i].getPosition().x << " " << circle[i].getPosition().y << std::endl;
+                            }
+                            
                         }
                     }
                 }
