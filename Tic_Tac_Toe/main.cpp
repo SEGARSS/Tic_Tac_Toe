@@ -3,7 +3,7 @@
 #include <iostream>
 
 /*
-1. Сделать чтобы кружок оставался после нажатия в клетке.
+1. Сделать крестик
 */
 
 int main()
@@ -78,7 +78,7 @@ int main()
                             {
                                 if (corV == circle[i].getPosition())
                                 {
-                                    find == true;
+                                    find = true;
                                 }
                                 std::cout << circle.size() << std::endl;
                                 std::cout << circle[i].getPosition().x << " " << circle[i].getPosition().y << std::endl;
