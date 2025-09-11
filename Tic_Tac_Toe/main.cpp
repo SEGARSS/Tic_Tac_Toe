@@ -71,17 +71,24 @@ int main()
                         if (fields[i].contains(pos) == true)
                         {
                             sf::Vector2f corV = fields[i].getCenter();
-                            newCircle.setPosition(fields[i].getCenter());
-                            circle.push_back(newCircle);
+                            
+                            bool find = false;
+
                             for (int i = 0; i < circle.size(); i++)
                             {
-                                if (corV.x == circle[i].getPosition().x && corV.y == circle[i].getPosition().y)
+                                if (corV == circle[i].getPosition())
                                 {
-
+                                    find == true;
                                 }
+                                std::cout << circle.size() << std::endl;
                                 std::cout << circle[i].getPosition().x << " " << circle[i].getPosition().y << std::endl;
                             }
-                            
+
+                            if (find == false)
+                            {
+                                newCircle.setPosition(corV);
+                                circle.push_back(newCircle);
+                            }                            
                         }
                     }
                 }
