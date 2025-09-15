@@ -39,6 +39,23 @@ int main()
     newCircle.setOutlineColor(sf::Color::Red);
     newCircle.setOutlineThickness(5);
 
+    std::vector<sf::RectangleShape> rectangle;
+
+    sf::RectangleShape newRectangle;
+    newRectangle.setSize(sf::Vector2f(3, 200));
+    newRectangle.setOutlineColor(sf::Color::Red);
+    newRectangle.setOutlineThickness(5);
+    newRectangle.setRotation(sf::degrees(45.f));
+
+    std::vector<sf::RectangleShape> rectangle0;
+
+    sf::RectangleShape newRectangle0;
+    newRectangle0.setSize(sf::Vector2f(3, 200));
+    newRectangle0.setOutlineColor(sf::Color::Red);
+    newRectangle0.setOutlineThickness(5);
+    newRectangle0.setRotation(sf::degrees(-45.f));
+
+
     std::vector<sf::FloatRect> fields;
     fields.push_back(sf::FloatRect({ 0, 0 }, { 200, 200 }));
     fields.push_back(sf::FloatRect({ 200, 0 }, { 200, 200 }));
@@ -92,6 +109,68 @@ int main()
                         }
                     }
                 }
+
+                if (mb->button == sf::Mouse::Button::Right)
+                {
+                    sf::Vector2f pos{ static_cast<float>(mb->position.x), static_cast<float>(mb->position.y) };
+
+                    for (int i = 0; i < fields.size(); ++i)
+                    {
+                        if (fields[i].contains(pos) == true)
+                        {
+                            sf::Vector2f corV = fields[i].getCenter();
+
+                            bool find = false;
+
+                            for (int i = 0; i < rectangle.size(); i++)
+                            {
+                                if (corV == rectangle[i].getPosition())
+                                {
+                                    find = true;
+                                }
+                                std::cout << rectangle.size() << std::endl;
+                                std::cout << rectangle[i].getPosition().x << " " << rectangle[i].getPosition().y << std::endl;
+                            }
+
+                            if (find == false)
+                            {
+                                newRectangle.setPosition(corV);
+                                rectangle.push_back(newRectangle);
+                            }
+                        }
+                    }
+                }
+
+                if (mb->button == sf::Mouse::Button::Right)
+                {
+                    sf::Vector2f pos{ static_cast<float>(mb->position.x), static_cast<float>(mb->position.y) };
+
+                    for (int i = 0; i < fields.size(); ++i)
+                    {
+                        if (fields[i].contains(pos) == true)
+                        {
+                            sf::Vector2f corV = fields[i].getCenter();
+
+                            bool find = false;
+
+                            for (int i = 0; i < rectangle0.size(); i++)
+                            {
+                                if (corV == rectangle0[i].getPosition())
+                                {
+                                    find = true;
+                                }
+                                std::cout << rectangle0.size() << std::endl;
+                                std::cout << rectangle0[i].getPosition().x << " " << rectangle0[i].getPosition().y << std::endl;
+                            }
+
+                            if (find == false)
+                            {
+                                newRectangle0.setPosition(corV);
+                                rectangle0.push_back(newRectangle0);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -106,6 +185,16 @@ int main()
         for (int i = 0; i < circle.size(); i++)
         {
             window.draw(circle[i]);
+        }
+
+        for (int i = 0; i < rectangle.size(); i++)
+        {
+            window.draw(rectangle[i]);
+        }
+
+        for (int i = 0; i < rectangle0.size(); i++)
+        {
+            window.draw(rectangle0[i]);
         }
 
         // Update the window
