@@ -40,7 +40,7 @@ int main()
 
         }
 
-        sf::Vector2f getPosdition()
+        sf::Vector2f getPosition()
         {
             return position;
         }
@@ -134,12 +134,12 @@ int main()
 
                         for (int i = 0; i < figure.size(); i++)
                         {
-                            if (corV == figure[i]->getPosdition())
+                            if (corV == figure[i]->getPosition())
                             {
                                 find = true;
                             }
                             std::cout << figure.size() << std::endl;
-                            std::cout << figure[i]->getPosdition().x << " " << figure[i]->getPosdition().y << std::endl;
+                            std::cout << figure[i]->getPosition().x << " " << figure[i]->getPosition().y << std::endl;
                         }
 
                         if (find == false)
