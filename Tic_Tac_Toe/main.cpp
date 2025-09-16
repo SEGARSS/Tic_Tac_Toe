@@ -32,8 +32,6 @@ int main()
     rectangle4.setOutlineColor(sf::Color::Red);
     rectangle4.setPosition({ 0, 400 });
 
-    std::vector<sf::CircleShape> circle;
-
     //------------------------------------------------------------------------------------
     struct Base
     {
@@ -47,12 +45,7 @@ int main()
             return position;
         }
 
-        void draw(sf::RenderWindow& window)
-        {
-            window.draw(newRectangle);
-            window.draw(newRectangle0);
-            window.draw(newCircle);
-        }
+        virtual void draw(sf::RenderWindow& window);        
 
         sf::Vector2f position;
 
@@ -70,7 +63,13 @@ int main()
             newCircle.setOrigin({ 70, 70 });
             newCircle.setOutlineColor(sf::Color::Red);
             newCircle.setOutlineThickness(5);
-        }        
+            newCircle.setPosition({ pos.x, pos.y });
+        }
+
+        void draw(sf::RenderWindow& window) override
+        {
+            window.draw(newCircle);
+        }
     };
     //------------------------------------------------------------------------------------
     struct Cross : Base
@@ -90,11 +89,15 @@ int main()
             newRectangle0.setRotation(sf::degrees(-45.f));
             newRectangle0.setPosition({ pos.x - 70, pos.y - 70 });
         }
+
+        void draw(sf::RenderWindow& window) override
+        {
+            window.draw(newRectangle);
+            window.draw(newRectangle0);
+        }
     };
     //------------------------------------------------------------------------------------
-   
-
-    std::vector<Base> figure;
+    std::vector<Base*> figure;
 
     std::vector<sf::FloatRect> fields;
     fields.push_back(sf::FloatRect({ 0, 0 }, { 200, 200 }));
@@ -144,11 +147,11 @@ int main()
                         {
                             if (mb->button == sf::Mouse::Button::Right)
                             {
-                                figure.push_back(Cross(corV));
+                                figure.push_back(new Cross(corV));
                             }
                             else if (mb->button == sf::Mouse::Button::Left)
                             {
-                                figure.push_back(Cirle(corV));
+                                figure.push_back(new Cirle(corV));
                             }
                         }
                     }
@@ -164,9 +167,9 @@ int main()
         window.draw(rectangle3);
         window.draw(rectangle4);
 
-        for (int i = 0; i < crosses.size(); i++)
+        for (int i = 0; i < figure.size(); i++)
         {
-            crosses[i].draw(window);
+            figure[i]->draw(newRectangle);
         }
 
         // Update the window
