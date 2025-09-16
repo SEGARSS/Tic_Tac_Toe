@@ -2,10 +2,11 @@
 #include <vector>
 #include <iostream>
 
-/*
-1. Сделать крестик
-*/
+using namespace std;
+using namespace sf;
 
+
+//------------------------------------------------------------------------------------
 int main()
 {
     // Create the main window
@@ -33,21 +34,45 @@ int main()
 
     std::vector<sf::CircleShape> circle;
 
-    sf::CircleShape newCircle;
-    newCircle.setRadius(70);
-    newCircle.setOrigin({ 70, 70 });
-    newCircle.setOutlineColor(sf::Color::Red);
-    newCircle.setOutlineThickness(5);
-
-
+    //------------------------------------------------------------------------------------
     struct Base
     {
-    };
+        Base()
+        {
 
+        }
+
+        sf::Vector2f getPosdition()
+        {
+            return position;
+        }
+
+        void draw(sf::RenderWindow& window)
+        {
+            window.draw(newRectangle);
+            window.draw(newRectangle0);
+            window.draw(newCircle);
+        }
+
+        sf::Vector2f position;
+
+        sf::RectangleShape newRectangle;
+        sf::RectangleShape newRectangle0;
+        sf::CircleShape newCircle;
+    };
+    //------------------------------------------------------------------------------------
     struct Cirle : Base
     {
+        Cirle(sf::Vector2f pos)
+        {
+            position = pos;
+            newCircle.setRadius(70);
+            newCircle.setOrigin({ 70, 70 });
+            newCircle.setOutlineColor(sf::Color::Red);
+            newCircle.setOutlineThickness(5);
+        }        
     };
-
+    //------------------------------------------------------------------------------------
     struct Cross : Base
     {
         Cross(sf::Vector2f pos)
@@ -63,29 +88,13 @@ int main()
             newRectangle0.setOutlineColor(sf::Color::Red);
             newRectangle0.setOutlineThickness(5);
             newRectangle0.setRotation(sf::degrees(-45.f));
-            // X   Y
             newRectangle0.setPosition({ pos.x - 70, pos.y - 70 });
         }
-
-        void draw(sf::RenderWindow& w)
-        {
-            w.draw(newRectangle);
-            w.draw(newRectangle0);
-        }
-
-        sf::Vector2f getPosdition()
-        {
-            return position;
-        }
-
-        sf::RectangleShape newRectangle;
-        sf::RectangleShape newRectangle0;
-        sf::Vector2f position;
     };
+    //------------------------------------------------------------------------------------
+   
 
     std::vector<Base> figure;
-    //figure.push_back(Cross());
-    //figure.push_back(Cirle());
 
     std::vector<sf::FloatRect> fields;
     fields.push_back(sf::FloatRect({ 0, 0 }, { 200, 200 }));
@@ -139,7 +148,7 @@ int main()
                             }
                             else if (mb->button == sf::Mouse::Button::Left)
                             {
-                                figure.push_back(Circle(corV));
+                                figure.push_back(Cirle(corV));
                             }
                         }
                     }
