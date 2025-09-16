@@ -45,7 +45,7 @@ int main()
             return position;
         }
 
-        virtual void draw(sf::RenderWindow& window);        
+        virtual void draw(sf::RenderWindow& window) = 0;        
 
         sf::Vector2f position;
 
@@ -134,14 +134,13 @@ int main()
 
                         for (int i = 0; i < figure.size(); i++)
                         {
-                            if (corV == figure[i].getPosdition())
+                            if (corV == figure[i]->getPosdition())
                             {
                                 find = true;
                             }
                             std::cout << figure.size() << std::endl;
-                            std::cout << figure[i].getPosdition().x << " " << figure[i].getPosdition().y << std::endl;
+                            std::cout << figure[i]->getPosdition().x << " " << figure[i]->getPosdition().y << std::endl;
                         }
-
 
                         if (find == false)
                         {
@@ -169,7 +168,7 @@ int main()
 
         for (int i = 0; i < figure.size(); i++)
         {
-            figure[i]->draw(newRectangle);
+            figure[i]->draw(window);
         }
 
         // Update the window
