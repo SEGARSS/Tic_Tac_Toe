@@ -9,7 +9,7 @@ using namespace sf;
 //------------------------------------------------------------------------------------
 int main()
 {
-    // Create the main window
+    // Настройеи игрового окна
     sf::RenderWindow window(sf::VideoMode({ 600, 600 }), "SFML window");
 
     sf::RectangleShape rectangle1;
@@ -35,9 +35,10 @@ int main()
     //------------------------------------------------------------------------------------
     struct Base
     {
-        Base()
+        Base(sf::Vector2f pos)
         {
-
+            //Позицию используем и в крестиках и ноликах, поэтому управляет этим базовый класс(структура)
+            position = pos;
         }
 
         sf::Vector2f getPosition()
@@ -45,20 +46,17 @@ int main()
             return position;
         }
 
+        //Делаем виртуальный метод, и вконце прописываем 0 обезательно, иначе не будет рабоать.
         virtual void draw(sf::RenderWindow& window) = 0;        
 
-        sf::Vector2f position;
-
-        sf::RectangleShape newRectangle;
-        sf::RectangleShape newRectangle0;
-        sf::CircleShape newCircle;
+        sf::Vector2f position;        
     };
     //------------------------------------------------------------------------------------
     struct Cirle : Base
     {
         Cirle(sf::Vector2f pos)
+        : Base(pos)
         {
-            position = pos;
             newCircle.setRadius(70);
             newCircle.setOrigin({ 70, 70 });
             newCircle.setOutlineColor(sf::Color::Red);
@@ -70,13 +68,15 @@ int main()
         {
             window.draw(newCircle);
         }
+
+        sf::CircleShape newCircle;
     };
     //------------------------------------------------------------------------------------
     struct Cross : Base
     {
         Cross(sf::Vector2f pos)
+        : Base(pos)
         {
-            position = pos;
             newRectangle.setSize(sf::Vector2f(3, 200));
             newRectangle.setOutlineColor(sf::Color::Red);
             newRectangle.setOutlineThickness(5);
@@ -95,8 +95,16 @@ int main()
             window.draw(newRectangle);
             window.draw(newRectangle0);
         }
+
+        sf::RectangleShape newRectangle;
+        sf::RectangleShape newRectangle0;
     };
     //------------------------------------------------------------------------------------
+
+    /*
+    Почему figure видит и крестики и нолики ? (Мы объявили vector<Base*> figure), а у Base есть доступ
+    и к Cirle (нолики), Cross (крестик), из за наследования этих структур. 
+    */
     std::vector<Base*> figure;
 
     std::vector<sf::FloatRect> fields;
@@ -110,47 +118,57 @@ int main()
     fields.push_back(sf::FloatRect({ 200, 400 }, { 200, 200 }));
     fields.push_back(sf::FloatRect({ 400, 400 }, { 200, 200 }));
 
-    // Start the game loop
+    // Запустите игровой цикл
     while (window.isOpen())
     {
         // Process events
         while (const std::optional event = window.pollEvent())
         {
-            // Close window: exit
+            // Закрыть окно: выход
             if (event->is<sf::Event::Closed>())
                 window.close();
 
+            //Определяем что управление в игре будет мышкой.
             if (const auto* mb = event->getIf<sf::Event::MouseButtonPressed>())
             {
+                //Определяем позиция куда нажали мышкой.
                 sf::Vector2f pos{ static_cast<float>(mb->position.x), static_cast<float>(mb->position.y) };
 
-                for (int i = 0; i < fields.size(); ++i)
+                // Проходимся по всем клетка нашего игрового поля.
+                for (int i = 0; i < fields.size(); ++i) 
                 {
+                    // contains проверят, нажалась ли мышка в том участке (её позиция)
                     if (fields[i].contains(pos) == true)
                     {
+                        //Получить цент квадратика.
                         sf::Vector2f corV = fields[i].getCenter();
 
+                        //Заводим булевую переменную для определения, есть в квадрате уже фигура.
                         bool find = false;
 
+                        //Проходимся по вектору всех фигур (крестики, нолики)
                         for (int i = 0; i < figure.size(); i++)
                         {
+                            //Сравниваем, центр квадрата, есть ли там уже какаето фигура.
                             if (corV == figure[i]->getPosition())
                             {
+                                //Если есть, права(да)
                                 find = true;
                             }
                             std::cout << figure.size() << std::endl;
                             std::cout << figure[i]->getPosition().x << " " << figure[i]->getPosition().y << std::endl;
                         }
 
+                        //Если нет в фигуры в квадрате, то в ставим фигуру (в зависимости от нажатой кнопки)
                         if (find == false)
                         {
                             if (mb->button == sf::Mouse::Button::Right)
                             {
-                                figure.push_back(new Cross(corV));
+                                figure.push_back(new Cross(corV)); //Правая кнопка, ставим крестик
                             }
                             else if (mb->button == sf::Mouse::Button::Left)
                             {
-                                figure.push_back(new Cirle(corV));
+                                figure.push_back(new Cirle(corV));//Левая кнопка, ставим нолик
                             }
                         }
                     }
@@ -158,7 +176,7 @@ int main()
             }
         }
 
-        // Clear screen
+        // Очистка окна
         window.clear();
 
         window.draw(rectangle1);
@@ -168,10 +186,11 @@ int main()
 
         for (int i = 0; i < figure.size(); i++)
         {
+            //Выводим на экран наши крестики и нолики.
             figure[i]->draw(window);
         }
 
-        // Update the window
+        // Обновление окна
         window.display();
     }
 }
